@@ -9,7 +9,7 @@ Consumes data from ePANNDA Wrapper. Performs fuzzy matching logic in an attempt 
     idigbio_link: "http://search.idigbio.org/v2/view/records/5993b351-8e1a-42be-9b68-5e1b5a3ef4ae",
     ocr_link: "",
     score: 3,
-   matched_on: "order - title,locality - title,state/province - title"
+    matched_on: "order - title,locality - title,state/province - title"
   },
   {
     pbdb_link: "https://paleobiodb.org/data1.1/refs/single.json?id=53771&show=both",
