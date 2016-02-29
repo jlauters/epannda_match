@@ -1,6 +1,20 @@
 # ePANNDA Match
 Consumes data from ePANNDA Wrapper. Performs fuzzy matching logic in an attempt to join iDigBio specimens to citations from PBDB using BHL as a full text resource.
 
+### Manually Found Matches
+
+- http://search.idigbio.org/v2/view/records/c32288e2-cfba-447e-8491-5b82288a51f2
+- https://paleobiodb.org/data1.1/refs/single.json?id=5172&show=both
+
+- http://biodiversitylibrary.org/page/15413920#page/403/mode/1up
+
+- https://paleobiodb.org/data1.1/refs/single.json?id=5170&show=both
+- http://search.idigbio.org/v2/view/records/0e9810b8-fdb5-4ff6-829a-b1c4b81ea0e7
+
+- https://paleobiodb.org/data1.1/refs/single.json?id=41345&show=both
+- http://search.idigbio.org/v2/view/records/011544ec-5d66-46c7-98f9-abd2640b33f9
+
+
 ### Example Output
 ```javascript
 [
