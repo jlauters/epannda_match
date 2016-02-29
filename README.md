@@ -14,6 +14,21 @@ Consumes data from ePANNDA Wrapper. Performs fuzzy matching logic in an attempt 
 - https://paleobiodb.org/data1.1/refs/single.json?id=41345&show=both
 - http://search.idigbio.org/v2/view/records/011544ec-5d66-46c7-98f9-abd2640b33f9
 
+### iDigBio Matchable Fields
+- Scientific Name Authorship
+- Identification Remarks
+- Recorded By
+- Bibliographic Citation
+- Event Date
+- Occurence Remark
+- Associated References
+- Identification References
+- Scientific Name
+- Order
+- State / Province
+- Locality
+
+
 
 ### Example Output
 ```javascript
