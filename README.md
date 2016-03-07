@@ -39,15 +39,23 @@ Matching attempts so far have consisted of the following:
 
 -  then attempt to map PBDB Publication Title results to BHL using the following three BHL API Calls performed in an async waterfall
  ( https://github.com/caolan/async#waterfall )
-  -- "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=TitleSearchSimple&title=" + raw_title + "&apikey=" + config.bhl_key + "&format=json"
-  -- "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetTitleItems&titleid=" + title_id + "&apikey=" + config.bhl_key + "&format=json"
-  -- "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetItemMetadata&itemid=" + item_id + "&pages=t&ocr=t&parts=t&apikey=" + config.bhl_key + "&format=json"
+ - "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=TitleSearchSimple&title=" + raw_title + "&apikey=" + config.bhl_key + "&format=json"
+ - "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetTitleItems&titleid=" + title_id + "&apikey=" + config.bhl_key + "&format=json"
+ - "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetItemMetadata&itemid=" + item_id + "&pages=t&ocr=t&parts=t&apikey=" + config.bhl_key + "&format=json"
 
 - the last BHL call for GetItemMetadata returns an array of Page objects. These Page objects contain an "OcrText" field I parse for string matching on the above listed
 'iDigBio Matchable Fields' as  well as the PBDB Article Title
 
 - based on the number of string matches, a confidence score is assigned. currently all matches have the same weight, this could be adjusted to more accurately assess
 match strength and can then be indexed off of through the ePANDDA API parameters to adjust the result set.
+
+
+### Future Improvements
+This was an okay first attempt. Performing real time matching logic is not practical:
+- cron job like task to mine PBDB -> BHL results that have OCR Text available 
+  - keep list of PBDB oid "ref:####" that don't have BHL matches to reduce number of API Calls for bad results
+- MongoDB Lookup table(s) for Order, Collector, Author mapped to iDigBio UUIDs and PBDB oids ??
+- tune confidence scoring algorithm for better quality scoring
 
 ### Example Output
 ```javascript
