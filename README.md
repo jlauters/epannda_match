@@ -29,6 +29,35 @@ Consumes data from ePANNDA Wrapper. Performs fuzzy matching logic in an attempt 
 - Locality
 
 
+### Outline of Matching Approach
+
+Matching attempts so far have consisted of the following:
+
+- using the async npm package, kick off the following searches for iDigBio and PBDB in parallel ( https://github.com/caolan/async#parallel )
+  -- "https://paleobiodb.org/data1.2/taxa/refs.json?base_name=coleoptera&textresult"
+
+```javascript
+var options = { 
+    url: "http://search.idigbio.org/v2/search/records/",
+    json: true,
+    headers: { 'Content-Type': 'application/json' },
+    body: {
+        "rq": { "order": "coleoptera", "stateprovince": "colorado" }
+    }   
+}; 
+```
+
+-  then attempt to map PBDB Publication Title results to BHL using the following three BHL API Calls performed in an async waterfall
+ ( https://github.com/caolan/async#waterfall )
+  -- "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=TitleSearchSimple&title=" + raw_title + "&apikey=" + config.bhl_key + "&format=json"
+  -- "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetTitleItems&titleid=" + title_id + "&apikey=" + config.bhl_key + "&format=json"
+  -- "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetItemMetadata&itemid=" + item_id + "&pages=t&ocr=t&parts=t&apikey=" + config.bhl_key + "&format=json"
+
+- the last BHL call for GetItemMetadata returns an array of Page objects. These Page objects contain an "OcrText" field I parse for string matching on the above listed
+'iDigBio Matchable Fields' as  well as the PBDB Article Title
+
+- based on the number of string matches, a confidence score is assigned. currently all matches have the same weight, this could be adjusted to more accurately assess
+match strength and can then be indexed off of through the ePANDDA API parameters to adjust the result set.
 
 ### Example Output
 ```javascript
