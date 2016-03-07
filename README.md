@@ -33,19 +33,9 @@ Consumes data from ePANNDA Wrapper. Performs fuzzy matching logic in an attempt 
 
 Matching attempts so far have consisted of the following:
 
-- using the async npm package, kick off the following searches for iDigBio and PBDB in parallel ( https://github.com/caolan/async#parallel )
-  -- "https://paleobiodb.org/data1.2/taxa/refs.json?base_name=coleoptera&textresult"
-
-```javascript
-var options = { 
-    url: "http://search.idigbio.org/v2/search/records/",
-    json: true,
-    headers: { 'Content-Type': 'application/json' },
-    body: {
-        "rq": { "order": "coleoptera", "stateprovince": "colorado" }
-    }   
-}; 
-```
+- using the async npm package, kick off the following searches for iDigBio and PBDB in parallel ( https://github.com/caolan/async#parallel ):
+ - https://paleobiodb.org/data1.2/taxa/refs.json?base_name=coleoptera&textresult
+ - http://search.idigbio.org/v2/search/records/?rq={%22scientificname%22:%22coleoptera%22,%22stateprovince%22:%22colorado%22}
 
 -  then attempt to map PBDB Publication Title results to BHL using the following three BHL API Calls performed in an async waterfall
  ( https://github.com/caolan/async#waterfall )
