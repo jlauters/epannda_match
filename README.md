@@ -78,6 +78,109 @@ async.parallel({
  - "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetTitleItems&titleid=" + title_id + "&apikey=" + config.bhl_key + "&format=json"
  - "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetItemMetadata&itemid=" + item_id + "&pages=t&ocr=t&parts=t&apikey=" + config.bhl_key + "&format=json"
 
+```javascript
+async.waterfall([
+
+    // get PBDB Biblio References
+    function(waterfall) {
+        // using epannda_wrapper with dummy URL
+        request.get('http://epandda.test/pbdb_lookup/coleoptera', function(err, response, body) {
+            if(!err && response.statusCode == 200) {
+                waterfall(null, JSON.parse( body ));
+            }
+        });  
+    },
+
+    // for each reference, look up publication title in BHL
+    function(pbdb, waterfall) {
+        async.forEach(pbdb, function(pb, callback) {
+            // escape chars in title
+            var title = encodeURIComponent( pb.publication );
+            var options = { url: 'http://epandda.test/bhl_title/' + title };
+
+            request.get(options, function(err, response, body) {
+                if(!err && response.statusCode == 200) {
+                    var results == JSON.parse( body );
+
+                    if(results.titleID) {
+                        // add titleID to custom pb object
+                         pb.titleID = results.titleID;  
+                    }
+
+                    // foreach callback
+                    callback();
+                }
+            });
+        }, function(err) {
+            if(!err) { waterfall(null, pbdb) }
+            else { /* handle error */ }  
+        });
+    }, 
+
+    // Look up itemID by titleID
+    function(pbdb, waterfall) {
+
+          async.forEach(pbdb, function(pb, callback) {
+              if(pb.titleID) {
+                  request('http://epandda.test/bhl_title_items/' + pb.titleID, function(err, response, body) {
+                      if(!err && response.statusCode == 200) {
+                          var results = JSON.parse( body )
+
+                          // do logic to determine if we have the right match
+                          if( hasMatch ) {
+                              pb.itemID.push( itemID );  
+                          }
+
+                          // forEach Callback
+                          callback();
+                      }
+                  });
+              }
+          }, function(err) {
+              if(!err) { waterfall(null, pbdb) }  
+          });
+    },
+
+    // Parse through itemPages for OCR
+    function(pbdb, waterfall) {
+        async.forEach(pbdb, function(pb, meta_callback) {
+            var items = pb.itemID;
+            for( var i = 0; i < items.length; i++ ) {
+                (function(i) {
+
+                    request.get('http://epandda.test/bhl_item_meta/' + items[i], function(err, response, body) {
+                        var results = JSON.parse( body );
+                        var pages   = results.item_meta.pages
+
+                        if( pages.length ) {
+                            for(var j = 0; j < pages.length; j++) {
+                                (function(j) {
+
+                                  // Look for pages with some meat
+                                  if( 1000 <= pages[j].OcrText.length) {
+                                    // compare OcrText against various fields
+                                    if( hasMatch) {
+                                      // success!
+                                    }
+                                  }
+                                } )(j) 
+                            }
+                        }
+                    });
+                  
+                })(i)
+            }
+            meta_callback(pbdb);
+        }, function(err) {
+          if(!err) { waterfall(null, pbdb); }
+        })
+    }
+], function(err, results) {
+    // Waterfall done.
+    if(!err) { /* Do something with the results */ }
+})
+```
+
 - the last BHL call for GetItemMetadata returns an array of Page objects. These Page objects contain an "OcrText" field I parse for string matching on the above listed
 'iDigBio Matchable Fields' as  well as the PBDB Article Title
 
