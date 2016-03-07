@@ -37,6 +37,41 @@ Matching attempts so far have consisted of the following:
  - https://paleobiodb.org/data1.2/taxa/refs.json?base_name=coleoptera&textresult
  - http://search.idigbio.org/v2/search/records/?rq={%22scientificname%22:%22coleoptera%22,%22stateprovince%22:%22colorado%22}
 
+```javascript
+async.parallel({
+    pbdb.bhl: function(callback) {
+        request.get('https://paleobiodb.org/data1.2/taxa/refs.json?base_name=coleoptera&textresult', function(err, response, body) {
+            if(!err && response.statusCode == 200) {
+                // async callback
+                callback(null, JSON.parse( body ))    
+            }
+        });
+    },
+    idigbio: function(callback) {
+        var options = {
+            url: "http://search.idigbio.org/v2/search/records/",
+            json: true,
+            headers: { 'Content-Type': 'application/json' },
+            body: {
+                "rq": { "order": "coleoptera", "stateprovince": "colorado"}
+            }
+        };
+
+        request.get(options, function(err, response, body) {
+          if(!err && response.statusCode == 200) {
+              // async callback
+              callback(null, JSON.parse( body ));
+          }
+        });
+    }, function( err, results) {
+        if(!err) {
+            // do something with results from both calls
+        }  
+    }
+  
+})
+```
+
 -  then attempt to map PBDB Publication Title results to BHL using the following three BHL API Calls performed in an async waterfall
  ( https://github.com/caolan/async#waterfall )
  - "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=TitleSearchSimple&title=" + raw_title + "&apikey=" + config.bhl_key + "&format=json"
