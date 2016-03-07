@@ -74,9 +74,6 @@ async.parallel({
 
 -  then attempt to map PBDB Publication Title results to BHL using the following three BHL API Calls performed in an async waterfall
  ( https://github.com/caolan/async#waterfall )
- - "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=TitleSearchSimple&title=" + raw_title + "&apikey=" + config.bhl_key + "&format=json"
- - "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetTitleItems&titleid=" + title_id + "&apikey=" + config.bhl_key + "&format=json"
- - "http://www.biodiversitylibrary.org/api2/httpquery.ashx?op=GetItemMetadata&itemid=" + item_id + "&pages=t&ocr=t&parts=t&apikey=" + config.bhl_key + "&format=json"
 
 ```javascript
 async.waterfall([
