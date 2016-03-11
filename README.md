@@ -1,6 +1,52 @@
 # ePANNDA Match
 Consumes data from ePANNDA Wrapper. Performs fuzzy matching logic in an attempt to join iDigBio specimens to citations from PBDB using BHL as a full text resource.
 
+### UPDATED APPROACH AND INFO
+BHL seems to have removed OcrText from their API search making it harder to do machine based matching on full text.
+I've updated my approach with a Python script to do stricter pruning of PBDB results and rely less on PBDB => BHL connections before
+attempting to match against iDigbio Fields
+
+I query PBDB Biblio References by the base name 'coleoptera'. I then filter these results checking if state/province (ex: 'Colorado') and locality (ex: 'Florissant')
+exist in the Article Title. This helps to keep a smaller focused list of articles to match specimens for. Full text is still needed for increasing confidence of matches.
+I've been finding the full text OCR plates via BHL's Web UI and creating arrays of Scientific Names, or Families manually to then check against the list of iDigBio Specimens.
+In addition to this, i've been having success matching Scientific Name Authorship field to the Author of the paper or owner of the specimen collection.
+
+##### Some Example Output
+[ref:5139] Article Title: Adephagous and clavicorn Coleoptera from the Tertiary deposits at Florissant, Colorado with descriptions of a few other forms and a systematic list of the non-rhynchophorus Tertiary Coleoptera of North America matches search terms
+[ref:5139] Author: Scudder
+[ref:5139] Year: 1900
+https://paleobiodb.org/data1.1/refs/single.json?id=5139&show=both
+ - http://search.idigbio.org/v2/view/3918ef54-90a3-4add-a826-9376b631d50a
+ - http://search.idigbio.org/v2/view/1fb53fa7-17f4-41ee-b195-0913e2fa27b8
+ - http://search.idigbio.org/v2/view/5625965a-007b-4d8d-aa71-7b7579fcd425
+ - http://search.idigbio.org/v2/view/6423f0c0-f7f3-46c1-a2a6-017095d46238
+ - http://search.idigbio.org/v2/view/04f6418b-3bc7-4534-b281-700a77019521
+ - http://search.idigbio.org/v2/view/0e9810b8-fdb5-4ff6-829a-b1c4b81ea0e7
+ - http://search.idigbio.org/v2/view/7b3b6846-3159-4a2b-bb32-61e8d3e60708
+ - http://search.idigbio.org/v2/view/771e44d1-6d6f-4ed5-b7f1-4e9dd0d6f856
+ - http://search.idigbio.org/v2/view/f8031b45-3195-4529-94a9-11df25b48e71
+ - http://search.idigbio.org/v2/view/011544ec-5d66-46c7-98f9-abd2640b33f9
+ - http://search.idigbio.org/v2/view/616d92eb-5e79-4a47-be07-d2f2b126162c
+ - http://search.idigbio.org/v2/view/9997db77-5a69-482a-85bc-4cb9e10e2ae9
+ - http://search.idigbio.org/v2/view/acd15894-48ab-41db-ac1d-12a5fbc96d1d
+ - http://search.idigbio.org/v2/view/55395973-d565-45b4-86a8-90b7b58ce5eb
+ - http://search.idigbio.org/v2/view/20594175-3997-49a7-bfd8-32293c6d2be6
+ - http://search.idigbio.org/v2/view/192c3dd2-b1f4-45c7-9288-cd8c2c0aee35
+ - http://search.idigbio.org/v2/view/1e47b938-84a0-4f84-baf0-034454b33712
+ - http://search.idigbio.org/v2/view/a4317306-ee9c-43d6-9d89-500651f46efc
+ - http://search.idigbio.org/v2/view/6061c3e7-6e2b-403d-b72d-ca9424caec0b
+ - http://search.idigbio.org/v2/view/754bb17f-6826-427f-8c36-e6e58e9b0108
+ - http://search.idigbio.org/v2/view/916f8a32-aa67-4c64-b1b7-d6250c72a411
+ - http://search.idigbio.org/v2/view/51d896ca-a767-4d8c-b12b-7234ee5e59fb
+ - http://search.idigbio.org/v2/view/2b74e327-c2c2-427c-b2e1-6b9ccd7a5c05
+ - http://search.idigbio.org/v2/view/82b48039-069d-4ca6-b512-82da799e0e0c
+ - http://search.idigbio.org/v2/view/f8f6598d-73c9-4f78-8932-e9de531068f7
+ - http://search.idigbio.org/v2/view/c8ef43dc-04c6-45a1-b4f5-7c602e1dcbc2
+ - http://search.idigbio.org/v2/view/25d3a561-9b2c-4acd-831c-ce0e5e96889f
+ - http://search.idigbio.org/v2/view/b134196f-3681-45ef-ac2a-9eaa1fffd736
+ - http://search.idigbio.org/v2/view/2e66597a-4a82-4c59-a9a1-7a34ba81df33
+ - http://search.idigbio.org/v2/view/2a4b8637-08d0-4173-bfc8-3883da1fa31f
+
 ### Manually Found Matches
 
 - http://search.idigbio.org/v2/view/records/c32288e2-cfba-447e-8491-5b82288a51f2
