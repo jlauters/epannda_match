@@ -12,10 +12,15 @@ I've been finding the full text OCR plates via BHL's Web UI and creating arrays 
 In addition to this, i've been having success matching Scientific Name Authorship field to the Author of the paper or owner of the specimen collection.
 
 ##### Some Example Output
+
+```
 [ref:5139] Article Title: Adephagous and clavicorn Coleoptera from the Tertiary deposits at Florissant, Colorado with descriptions of a few other forms and a systematic list of the non-rhynchophorus Tertiary Coleoptera of North America matches search terms
 [ref:5139] Author: Scudder
 [ref:5139] Year: 1900
-https://paleobiodb.org/data1.1/refs/single.json?id=5139&show=both
+```
+
+ - [ Full Text ] http://www.biodiversitylibrary.org/item/95317#page/11/mode/1up
+ - https://paleobiodb.org/data1.1/refs/single.json?id=5139&show=both
  - http://search.idigbio.org/v2/view/3918ef54-90a3-4add-a826-9376b631d50a
  - http://search.idigbio.org/v2/view/1fb53fa7-17f4-41ee-b195-0913e2fa27b8
  - http://search.idigbio.org/v2/view/5625965a-007b-4d8d-aa71-7b7579fcd425
